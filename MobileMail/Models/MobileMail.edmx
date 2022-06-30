@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MobileMail.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="MobileMailStoreContainer">
+    <EntitySet Name="Mails" EntityType="MobileMail.Store.Mails" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Attaches" EntityType="MobileMail.Store.Attaches" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="MobileMail.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Contacts" EntityType="MobileMail.Store.Contacts" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="MailAttach" Association="MobileMail.Store.MailAttach">
+      <End Role="Mail" EntitySet="Mails" />
+      <End Role="Attach" EntitySet="Attaches" />
+    </AssociationSet>
+    <AssociationSet Name="UserContact" Association="MobileMail.Store.UserContact">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Contact" EntitySet="Contacts" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Mails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="From" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="To" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Date" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Status" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Attaches">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Value" Type="tinyint" Nullable="false" />
+    <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MailId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AccountName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ProfilePhoto" Type="tinyint" Nullable="true" />
+    <Property Name="AlternativeMail" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Contacts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Alias" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MobileMail" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="MailAttach">
+    <End Role="Mail" Type="MobileMail.Store.Mails" Multiplicity="1" />
+    <End Role="Attach" Type="MobileMail.Store.Attaches" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Mail">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Attach">
+        <PropertyRef Name="MailId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserContact">
+    <End Role="User" Type="MobileMail.Store.Users" Multiplicity="1" />
+    <End Role="Contact" Type="MobileMail.Store.Contacts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Contact">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="MobileMail" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="MobileMailContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Mails" EntityType="MobileMail.Mail" />
+          <EntitySet Name="Attaches" EntityType="MobileMail.Attach" />
+          <AssociationSet Name="MailAttach" Association="MobileMail.MailAttach">
+            <End Role="Mail" EntitySet="Mails" />
+            <End Role="Attach" EntitySet="Attaches" />
+          </AssociationSet>
+          <EntitySet Name="Users" EntityType="MobileMail.User" />
+          <EntitySet Name="Contacts" EntityType="MobileMail.Contact" />
+          <AssociationSet Name="UserContact" Association="MobileMail.UserContact">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Contact" EntitySet="Contacts" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Mail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="From" Type="String" Nullable="false" />
+          <Property Name="To" Type="String" Nullable="false" />
+          <Property Name="Content" Type="String" Nullable="false" />
+          <Property Name="Date" Type="String" Nullable="false" />
+          <NavigationProperty Name="Attaches" Relationship="MobileMail.MailAttach" FromRole="Mail" ToRole="Attach" />
+          <Property Name="Status" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Attach">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="Byte" Nullable="false" />
+          <Property Name="Type" Type="String" Nullable="false" />
+          <NavigationProperty Name="Mail" Relationship="MobileMail.MailAttach" FromRole="Attach" ToRole="Mail" />
+          <Property Name="MailId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="MailAttach">
+          <End Type="MobileMail.Mail" Role="Mail" Multiplicity="1" />
+          <End Type="MobileMail.Attach" Role="Attach" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Attach">
+              <PropertyRef Name="MailId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="AccountName" Type="String" Nullable="false" />
+          <Property Name="ProfilePhoto" Type="Byte" Nullable="true" />
+          <Property Name="AlternativeMail" Type="String" Nullable="true" />
+          <NavigationProperty Name="Contacts" Relationship="MobileMail.UserContact" FromRole="User" ToRole="Contact" />
+        </EntityType>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Alias" Type="String" Nullable="false" />
+          <Property Name="MobileMail" Type="String" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="MobileMail.UserContact" FromRole="Contact" ToRole="User" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="UserContact">
+          <End Type="MobileMail.User" Role="User" Multiplicity="1" />
+          <End Type="MobileMail.Contact" Role="Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contact">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MobileMailStoreContainer" CdmEntityContainer="MobileMailContainer">
+    <EntitySetMapping Name="Mails">
+      <EntityTypeMapping TypeName="IsTypeOf(MobileMail.Mail)">
+        <MappingFragment StoreEntitySet="Mails">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="From" ColumnName="From" />
+          <ScalarProperty Name="To" ColumnName="To" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Attaches">
+      <EntityTypeMapping TypeName="IsTypeOf(MobileMail.Attach)">
+        <MappingFragment StoreEntitySet="Attaches">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="MailId" ColumnName="MailId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(MobileMail.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+          <ScalarProperty Name="ProfilePhoto" ColumnName="ProfilePhoto" />
+          <ScalarProperty Name="AlternativeMail" ColumnName="AlternativeMail" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contacts">
+      <EntityTypeMapping TypeName="IsTypeOf(MobileMail.Contact)">
+        <MappingFragment StoreEntitySet="Contacts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Alias" ColumnName="Alias" />
+          <ScalarProperty Name="MobileMail" ColumnName="MobileMail" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
